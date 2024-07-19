@@ -1,0 +1,184 @@
+#!/usr/bin/env expect
+#
+# @(!--#) @(#) config2tftp.exp, sversion 0.1.0, fversion 007, 19-july-2024
+#
+# an expect script to login to a HP switch via ssh and run the
+# command to copy the config to a TFTP server
+#
+
+# ################################################## #
+
+proc usage {} {
+  global progname
+
+  send_error "$progname: usage: $progname --ip Switch_IPv4_Address --user USERNAME --pass PASSWORD --tftp TFTP_Sever_IPv4 Address\n"
+
+  exit 2
+}
+
+# ################################################## #
+
+#
+# Main
+#
+
+# get program/script name
+set progname [file tail $argv0]
+
+# print usage message if no command line arguments
+if {[llength $argv] < 1} {
+  usage
+}
+
+# set default command line arguments
+set switchip ""
+set switchuser ""
+set switchpass ""
+set tftpip ""
+
+# process command line arguments
+set argc [llength $argv]
+set i 0
+while {$i < $argc} {
+  set arg [lindex $argv $i]
+
+  if {[string equal $arg "--ip"]} {
+    incr i
+    if {$i >= $argc} {
+      send_error "$progname: expecting switch IP address after \"--ip\" command line argument\n"
+      exit 1
+    }
+    set switchip [lindex $argv $i]
+  } elseif {[string equal $arg "--user"]} {
+    incr i
+    if {$i >= $argc} {
+      send_error "$progname: expecting switch user name after \"--user\" command line argument\n"
+      exit 1
+    }
+    set switchuser [lindex $argv $i]
+  } elseif {[string equal $arg "--pass"]} {
+    incr i
+    if {$i >= $argc} {
+      send_error "$progname: expecting switch password after \"--pass\" command line argument\n"
+      exit 1
+    }
+    set switchpass [lindex $argv $i]
+  } elseif {[string equal $arg "--tftp"]} {
+    incr i
+    if {$i >= $argc} {
+      send_error "$progname: expecting TFTP server IP address/hostname after \"--tftp\" command line argument\n"
+      exit 1
+    }
+    set tftpip [lindex $argv $i]
+  } else {
+    send_error "$progname: unexpected command line flag/argument \"$arg\"\n"
+    usage
+  }
+
+  incr i
+}
+
+# create a star version of the switch password
+set starpassword ""
+for {set i 1} {$i <= [string length $switchpass]} {incr i} {
+  set starpassword "[set starpassword]*"
+}
+
+# diagnostic output (note that the switch password output is the "star" version
+puts "Switch IP .........: \"$switchip\""
+puts "Switch user .......: \"$switchuser\""
+puts "Switch password ...: \"$starpassword\""
+puts "TFTP server IP ....: \"$tftpip\""
+
+# check we have non-null values for the command line options
+if {$switchip == ""} {
+  send_error "$progname: the switch IP address was not specified or is the null/empty string)\n"
+  exit 1
+}
+if {$switchuser == ""} {
+  send_error "$progname: the switch user name was not specified or is the null/empty string)\n"
+  exit 1
+}
+if {$switchpass == ""} {
+  send_error "$progname: the switch password was not specified or is the null/empty string)\n"
+  exit 1
+}
+if {$tftpip == ""} {
+  send_error "$progname: the TFTP server IP adddress/hostname was not specified or is the null/empty string)\n"
+  exit 1
+}
+
+log_user 0
+
+spawn ssh -i /dev/null -oKexAlgorithms=+diffie-hellman-group14-sha1 [set switchuser]@[set switchip]
+
+set passcount 0
+
+set promptcount 0
+
+while {1} {
+  expect {
+    timeout {
+      send_error "\n$progname: command timeout waiting for a valid response\n"
+      exit 1
+    }
+    eof {
+      send_error "\n$progname: ssh command exited too soon\n"
+      exit 1
+    }
+    "Are you sure you want to continue connecting (yes/no/?fingerprint?)? " {
+      send "yes\r"
+    }
+    " password: " {
+      incr passcount
+      if {$passcount > 1} {
+        send_error "$progname: password already entered once - maybe it is wrong?\n"
+        exit 1
+      }
+      puts "*** Sending password ***"
+      send "$switchpass\r"
+    }
+    "Press any key to continue" {
+      puts "*** Logged in successfully ***"
+      send " "
+    }
+    "# " {
+      if {$promptcount == 0} {
+        log_user 1
+        send "\r"
+      } elseif {$promptcount == 1} {
+        send "show version\r"
+      } elseif {$promptcount == 2} {
+        send "copy running-config tftp [set tftpip] switch-[set switchip]-running-config.txt\r"
+      } else {
+        log_user 0
+        send "exit\r"
+      }
+      incr promptcount
+    }
+    "> " {
+      send "exit\r"
+    }
+    "Do you want to log out (y/n)? " {
+      puts ""
+      puts "*** Starting logout process ***"
+      send "y"
+      break
+    }
+  }
+}
+
+expect {
+  timeout {
+    send_error "\n$progname: command timeout waiting for eof\n"
+    exit 1
+  }
+  eof {
+      # fall through
+  }
+}
+
+puts "*** Successfully logged out ***"
+
+# if control gets here then exit with success
+exit 0
