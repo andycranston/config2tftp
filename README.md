@@ -228,14 +228,14 @@ Once you get the `config2tftp.exp` script working on you HP switch here are some
 + Track changes found by the previous comparsion in a file so you have an "audit trail" of changes
 + Send an alert if the `config2tftp.exp` expect script cannot successfully ssh into the switch
 
-If you have more than one HP switch and can implement all the above then
-I would say you will now be in a better situation of managing your HP
-switches that you can demonstrate to you empleyer - maybe that will be
-the time to ask for that overdue pay rise :-]
+If you have more than one HP switch and can implement all the above
+then I would say you will now be in a better situation of managing
+your HP switches. This will be an improvement that you can show to your
+employer. Maybe that will be the time to ask for that overdue pay rise :-]
 
 Talking pay - if you found any of this useful then just "pay it forward"
-by letting someone else you know about it - but if you really insist
-that I should get a modest recogniton then I am most, and very, grateful.
+by letting someone else know about it. But if you really insist
+that I should get a modest recogniton then I will be most, and very, grateful.
 
 
 
