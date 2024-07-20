@@ -1,6 +1,6 @@
 #!/usr/bin/env expect
 #
-# @(!--#) @(#) config2tftp.exp, sversion 0.1.0, fversion 007, 19-july-2024
+# @(!--#) @(#) config2tftp.exp, sversion 0.1.0, fversion 008, 21-july-2024
 #
 # an expect script to login to a HP switch via ssh and run the
 # command to copy the config to a TFTP server
@@ -110,7 +110,7 @@ if {$tftpip == ""} {
 
 log_user 0
 
-spawn ssh -i /dev/null -oKexAlgorithms=+diffie-hellman-group14-sha1 [set switchuser]@[set switchip]
+spawn ssh -i /dev/null -oKexAlgorithms=+diffie-hellman-group14-sha1 oHostKeyAlgorithms=+ssh-rsa [set switchuser]@[set switchip]
 
 set passcount 0
 
