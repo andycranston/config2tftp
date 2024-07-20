@@ -80,8 +80,8 @@ In the example command change the following:
 
 + Change `192.168.1.10` to the IP address of the HP switch that a ssh (secure shell) connection can be made to
 + Change `manager` to the user name for a ssh connection to the HP switch
-+ Change `Secret001` to the password for a shh connection to the HP switch
-+ Change `192.168.1.253` to the IP address of the TFTP server that file can be written to
++ Change `Secret001` to the password for a ssh connection to the HP switch
++ Change `192.168.1.253` to the IP address of the TFTP server that a new file can be written to
 
 Here is a typical output from the above `config2tftp.exp` command:
 
@@ -148,9 +148,10 @@ no dhcp config-file-update
 password manager
 ```
 
-The running configuration of the HP ProCurve switch has been successfully copied to the
-TFTP server. Should that switch and need to be replaced the configuration to apply to the
-switch is avialable on the TFTP server.
+The running configuration of the HP ProCurve switch has been successfully
+copied to the TFTP server. Should that switch need to be replaced (for
+example because of a hardware failure) then the configuration to apply
+to the replacement switch is avialable on the TFTP server.
 
 ----------------
 End of README.md
