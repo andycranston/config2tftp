@@ -153,5 +153,88 @@ copied to the TFTP server. Should that switch need to be replaced (for
 example because of a hardware failure) then the configuration to apply
 to the replacement switch is avialable on the TFTP server.
 
+## It does not work - help !!!
+
+As I have only tested the `config2tftp.exp` expect script against my own HP switch running at
+a particular firmware version is it very likely you may have problems getting this script to
+work.
+
+DONT PANIC!
+
+I am happy to help (see my email address above - courteous enquires are alwats welcome).
+
+I am anticipating two major issues:
+
++ TFTP setup (e.g. the TFTP server is not allowing PUT operations)
++ The dialogue with the ssh connection to you HP switch is different to the one my switch has
+
+Let's look at these in turn.
+
+### TFTP Setup
+
+Confirm you can write a file to the TFTP server.
+
+A good way to do this is to create a small file and see if you can use the `tftp` command
+to send it (i.e. `write` it) to the TFTP server.
+
+For example on a Windows laptop you could try
+opening a command prompt and running command similar to:
+
+```
+echo "This is a TFTP test" > tftptest.txt
+tftp 192.168.1.253 PUT tftptest.txt
+```
+
+Change `192.168.1.253` to the IP address of your TFTP server.
+
+Then look on the TFTP server and see if the file `tftptest.txt` has been successfully copied.
+
+If the `tftptest.txt` file has not been successfully copied then this
+needs to be fixed before the `config2tftp.exp` will work successfully.
+
+### Dialogue issues
+
+When I use the phrase `diaglogue` I mean the output of the ssh command during the various
+stages of the login and connection.
+
+Common issues can be:
+
++ The prompts for the password may different to my HP switch
++ After login the session needs to be `elevated` with a switch command like `enable`
++ The process to logout from the switch might be different
++ The command to copy the runnign config to a TFTP server might be diferent on more recent firmware versions
+
+The good news is that the the `config2tftp.exp` can be enhanced to handle all these and other issues.
+
+If you are having any issue then please do following:
+
+```
+script /tmp/config2tftp.out
+config2tftp.exp --ip 192.168.1.10 --user manager --pass Secret001 --tftp 192.168.1.253
+exit
+```
+
+As before change the command line argument values for the switch IP etc. Send email me the `/tmp/config2tftp.out`
+file (see above for my email address) and I will try and amend the `config2tftp.exp` expect script to also
+work in your environment.
+
+## Advanced usage
+
+Once you get the `config2tftp.exp` script working on you HP switch here are some things to try:
+
++ Set up a cron job to get the config on a regular basis
++ Keep a history of the config
++ Compare the most recently retrieved config with the last one retrieved and raise an `alert` of some sort if it has been changed
++ Track changes found by the previous comparsion in a file so you have an "audit trail" of changes
++ Send an alert if the `config2tftp.exp` expect script cannot successfully ssh into the switch
+
+If you have more than one HP switch and can implement all the above then I would say you will be in a better
+situation of managing your HP switches - time to ask for that pay rise :-]
+
+Talking pay - if you found any of this useful the just "pay it forward" - but if you really insist
+I'll happily accept any modest payback you feel appropriate.
+
+
+
 ----------------
 End of README.md
