@@ -11,7 +11,7 @@ to the HP switch using a username and password. The HP switch I have tested the
 and the username used to ssh into the switch is `manager`.
 
 The second pre-requisite is that the `expect` command must be installed
-and be in a directory in listed in the PATH environment variable.
+and be in a directory listed in the PATH environment variable.
 
 If running the command:
 
@@ -61,7 +61,7 @@ switch you are all set.
 ## Quick start
 
 Copy the `config2tftp.exp` expect script to a directory listed in the PATH
-environment variiable.
+environment variable.
 
 Make it executable by all users by running this command:
 
