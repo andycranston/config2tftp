@@ -161,12 +161,12 @@ work.
 
 DONT PANIC!
 
-I am happy to help (see my email address above - courteous enquires are alwats welcome).
+I am happy to help (see my email address above - courteous enquires are always welcome).
 
 I am anticipating two major issues:
 
 + TFTP setup (e.g. the TFTP server is not allowing PUT operations)
-+ The dialogue with the ssh connection to you HP switch is different to the one my switch has
++ The dialogue with the ssh connection to your HP switch is different to the one my switch has
 
 Let's look at these in turn.
 
@@ -194,7 +194,7 @@ needs to be fixed before the `config2tftp.exp` will work successfully.
 
 ### Dialogue issues
 
-When I use the phrase `diaglogue` I mean the output of the ssh command during the various
+When I use the word `dialogue` I mean the output of the ssh command during the various
 stages of the login and connection.
 
 Common issues can be:
@@ -202,7 +202,7 @@ Common issues can be:
 + The prompts for the password may different to my HP switch
 + After login the session needs to be `elevated` with a switch command like `enable`
 + The process to logout from the switch might be different
-+ The command to copy the runnign config to a TFTP server might be diferent on more recent firmware versions
++ The command to copy the running config to a TFTP server might be different on more recent firmware versions
 
 The good news is that the the `config2tftp.exp` can be enhanced to handle all these and other issues.
 
@@ -228,11 +228,14 @@ Once you get the `config2tftp.exp` script working on you HP switch here are some
 + Track changes found by the previous comparsion in a file so you have an "audit trail" of changes
 + Send an alert if the `config2tftp.exp` expect script cannot successfully ssh into the switch
 
-If you have more than one HP switch and can implement all the above then I would say you will be in a better
-situation of managing your HP switches - time to ask for that pay rise :-]
+If you have more than one HP switch and can implement all the above then
+I would say you will now be in a better situation of managing your HP
+switches that you can demonstrate to you empleyer - maybe that will be
+the time to ask for that overdue pay rise :-]
 
-Talking pay - if you found any of this useful the just "pay it forward" - but if you really insist
-I'll happily accept any modest payback you feel appropriate.
+Talking pay - if you found any of this useful then just "pay it forward"
+by letting someone else you know about it - but if you really insist
+that I should get a modest recogniton then I am most, and very, grateful.
 
 
 
