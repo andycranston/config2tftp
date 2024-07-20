@@ -5,7 +5,12 @@ a TFTP server.
 
 ## Pre-requisites
 
-The first pre-requisite is that the `expect` command musy be installed
+The first pre-requisite is that it is possible to run the `ssh` command and login
+to the HP switch using a username and password. The HP switch I have tested the
+`config2ftp.exp` expect script on is a HP ProCurve 2620-24 Switch (HP part number J9623A)
+and the username used to ssh into the switch is `manager`.
+
+The second pre-requisite is that the `expect` command must be installed
 and be in a directory in listed in the PATH environment variable.
 
 If running the command:
@@ -29,10 +34,10 @@ sudo yum install expect
 Failing that you may need to compile `expect` from source. For help with this contact me via email at:
 
 ```
-andyc [AT] cranstonhub [Dot] com
+andy [[At]] cranstonhub [[Dot]] com
 ```
 
-The other pre-requisite is that there is a TFTP server available that
+The third pre-requisite is that there is a TFTP server available that
 the HP switch can use to copy it's running configuration to.
 The TFTP server must allow for clients to write new files to it.
 
@@ -43,8 +48,14 @@ I use this one:
 
 [TFTP daemon by H. Peter Anvin](https://mirrors.edge.kernel.org/pub/software/network/tftp/tftp-hpa/)
 
-With `expect` installed and a `writeable` TFTP available to your HP
-switch then you can try the 'Quick Start`.
+I downloaded the file:
+
+```
+tftp-hpa-5.2.tar.gz
+```
+
+With `expect` installed and a writeable TFTP server available to your HP
+switch you are all set.
 
 
 ## Quick start
@@ -52,7 +63,7 @@ switch then you can try the 'Quick Start`.
 Copy the `config2tftp.exp` expect script to a directory listed in the PATH
 environment variiable.
 
-Make it executable by all users by runninh this command:
+Make it executable by all users by running this command:
 
 ```
 chmod a+x config2tftp.exp
