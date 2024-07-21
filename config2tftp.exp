@@ -110,7 +110,7 @@ if {$tftpip == ""} {
 
 log_user 0
 
-spawn ssh -i /dev/null -oKexAlgorithms=+diffie-hellman-group14-sha1 oHostKeyAlgorithms=+ssh-rsa [set switchuser]@[set switchip]
+spawn ssh -i /dev/null -oKexAlgorithms=+diffie-hellman-group14-sha1 -oHostKeyAlgorithms=+ssh-rsa [set switchuser]@[set switchip]
 
 set passcount 0
 
